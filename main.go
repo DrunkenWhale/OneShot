@@ -3,6 +3,7 @@ package main
 import (
 	"io/ioutil"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -20,6 +21,9 @@ func main() {
 		info, err := entry.Info()
 		if err != nil {
 			panic(err)
+		}
+		if strings.Contains(info.Name(), "json") {
+			continue
 		}
 		time_ := info.ModTime().Unix()
 		if recentTime < time_ {
