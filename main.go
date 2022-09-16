@@ -22,6 +22,9 @@ func main() {
 	var recentTime int64 = 0
 	fileName := ""
 
+	var secondRecentTime int64 = 0
+	secondFileName := ""
+
 	for _, entry := range dirs {
 		info, err := entry.Info()
 		if err != nil {
@@ -32,8 +35,15 @@ func main() {
 		}
 		time_ := info.ModTime().Unix()
 		if recentTime < time_ {
+			secondRecentTime = recentTime
 			recentTime = time_
+			secondFileName = fileName
 			fileName = info.Name()
+		} else {
+			if secondRecentTime < time_ {
+				secondRecentTime = time_
+				secondFileName = info.Name()
+			}
 		}
 	}
 	currentPath, err := os.Getwd()
@@ -41,9 +51,9 @@ func main() {
 		panic(err)
 	}
 	if newName == "" {
-		CopyFile(path+fileName, currentPath+"\\"+fileName)
+		CopyFile(path+secondFileName, currentPath+"\\"+secondFileName)
 	} else {
-		CopyFile(path+fileName, currentPath+"\\"+newName+".png")
+		CopyFile(path+secondFileName, currentPath+"\\"+newName+".png")
 	}
 	return
 }
