@@ -1,12 +1,17 @@
 package main
 
 import (
+	"flag"
 	"io/ioutil"
 	"os"
 	"strings"
 )
 
+var newName = ""
+
 func main() {
+	flag.StringVar(&newName, "n", "", "image name")
+	flag.Parse()
 	path, _ := os.LookupEnv("LOCALAPPDATA")
 	path = path + "\\Packages\\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\\TempState\\ScreenClip\\"
 	dirs, err := os.ReadDir(path)
@@ -35,7 +40,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	CopyFile(path+fileName, currentPath+"\\"+fileName)
+	if newName == "" {
+		CopyFile(path+fileName, currentPath+"\\"+fileName)
+	} else {
+		CopyFile(path+fileName, currentPath+"\\"+newName+".png")
+	}
 	return
 }
 
